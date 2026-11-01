@@ -333,7 +333,7 @@ end)()
 ENV.__beamHue = ENV.__beamHue or 0
 
 local EMBEDDED_UI_SOURCE = [==[
---[[ AETHER UI Core — custom interface system ]]
+--[[ NEXUS//ZERO UI Core — horizontal command deck ]]
 local BASE = "https://raw.githubusercontent.com/%s/Azurite/main/library/"
 BASE = string.format(BASE, "kio6z")
 
@@ -370,12 +370,12 @@ local LocalPlayer = cloneref(Players.LocalPlayer)
 local PlayerGui = cloneref(LocalPlayer:FindFirstChildWhichIsA("PlayerGui") or LocalPlayer:WaitForChild("PlayerGui"))
 
 local Theme = {
-	Base=Color3.fromRGB(13,12,22), Top=Color3.fromRGB(23,19,37), Side=Color3.fromRGB(18,16,31),
-	Group=Color3.fromRGB(28,23,45), Element=Color3.fromRGB(22,19,36), ElementHov=Color3.fromRGB(43,34,66),
-	Input=Color3.fromRGB(22,19,36), Accent=Color3.fromRGB(167,139,250), AccentDim=Color3.fromRGB(94,234,212),
-	Text=Color3.fromRGB(245,241,255), SubText=Color3.fromRGB(183,173,207), Muted=Color3.fromRGB(125,113,151),
-	Off=Color3.fromRGB(54,46,75), Stroke=Color3.fromRGB(76,61,105), StrokeSub=Color3.fromRGB(48,39,69),
-	Warn=Color3.fromRGB(255,190,105), Good=Color3.fromRGB(94,234,212), Bad=Color3.fromRGB(255,115,145),
+	Base=Color3.fromRGB(8,13,17), Top=Color3.fromRGB(14,23,29), Side=Color3.fromRGB(11,19,24),
+	Group=Color3.fromRGB(18,31,37), Element=Color3.fromRGB(13,25,31), ElementHov=Color3.fromRGB(25,48,54),
+	Input=Color3.fromRGB(13,25,31), Accent=Color3.fromRGB(80,235,190), AccentDim=Color3.fromRGB(180,245,92),
+	Text=Color3.fromRGB(235,249,245), SubText=Color3.fromRGB(155,184,179), Muted=Color3.fromRGB(91,125,122),
+	Off=Color3.fromRGB(35,57,59), Stroke=Color3.fromRGB(47,102,91), StrokeSub=Color3.fromRGB(28,57,55),
+	Warn=Color3.fromRGB(255,190,90), Good=Color3.fromRGB(110,245,174), Bad=Color3.fromRGB(255,104,112),
 	Font=Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Regular),
 	FontMed=Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium),
 	FontBold=Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.SemiBold),
@@ -617,8 +617,8 @@ function UILib:Window(config)
 	local camera = workspace.CurrentCamera
 	local function targetSize()
 		local vp = camera and camera.ViewportSize or Vector2.new(1280,720)
-		if vp.X < 640 then return UDim2.fromOffset(math.clamp(vp.X-20,300,620), math.clamp(vp.Y-100,320,440)) end
-		return config.Size or UDim2.fromOffset(600,400)
+		if vp.X < 640 then return UDim2.fromOffset(math.max(300,vp.X-16), math.max(320,vp.Y-72)) end
+		return config.Size or UDim2.fromOffset(780,560)
 	end
 	PARENT = nil
 
@@ -683,9 +683,9 @@ function UILib:Window(config)
 	table.insert(Window._recolor, function() baseShadow.ImageTransparency = (Window._skin=="light") and 0.82 or 0.4 end)
 	new("UISizeConstraint", { MinSize=Vector2.new(300,320), Parent=base })
 
-	local top = new("Frame", { Name="Top", BackgroundColor3=T.Top, BorderSizePixel=0, Size=UDim2.new(1,0,0,48), ZIndex=2, Parent=base })
-	bgGrad(top, Color3.fromRGB(39,29,61), Color3.fromRGB(20,16,36)); corner(top, 8); skinTag(top, "top")
-	local topAccent = new("Frame", { Name="AetherAccent", BackgroundColor3=Window._accent or Color3.fromRGB(167,139,250), BorderSizePixel=0, Position=UDim2.new(0,0,1,-2), Size=UDim2.new(1,0,0,2), ZIndex=4, Parent=top }); new("UIGradient", { Color=ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(167,139,250)),ColorSequenceKeypoint.new(0.55,Color3.fromRGB(94,234,212)),ColorSequenceKeypoint.new(1,Color3.fromRGB(167,139,250))}), Parent=topAccent })
+	local top = new("Frame", { Name="Top", BackgroundColor3=T.Top, BorderSizePixel=0, Size=UDim2.new(1,0,0,54), ZIndex=2, Parent=base })
+	bgGrad(top, Color3.fromRGB(17,39,40), Color3.fromRGB(8,17,23), 0); corner(top, 8); skinTag(top, "top")
+	local topAccent = new("Frame", { Name="AetherAccent", BackgroundColor3=Window._accent or Color3.fromRGB(167,139,250), BorderSizePixel=0, Position=UDim2.new(0,0,1,-2), Size=UDim2.new(1,0,0,2), ZIndex=4, Parent=top }); new("UIGradient", { Color=ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(80,235,190)),ColorSequenceKeypoint.new(0.55,Color3.fromRGB(180,245,92)),ColorSequenceKeypoint.new(1,Color3.fromRGB(80,235,190))}), Parent=topAccent })
 	new("Frame", { BackgroundColor3=T.StrokeSub, BorderSizePixel=0, AnchorPoint=Vector2.new(0,1), Position=UDim2.new(0,0,1,0), Size=UDim2.new(1,0,0,1), ZIndex=2, Parent=top })
 	local icon = new("ImageLabel", { Name="Icon", BackgroundTransparency=1, Position=UDim2.new(0,12,0.5,-12), Size=UDim2.new(0,24,0,24), ZIndex=3, Image=config.Icon or DEFAULT_ICON, Parent=top })
 	corner(icon, 6); Window.Icon = icon; skinTag(icon, "icon")
@@ -760,18 +760,14 @@ function UILib:Window(config)
 			end
 		end)
 	end
-	local side = new("Frame", { Name="Side", BackgroundColor3=T.Side, BorderSizePixel=0, Position=UDim2.new(0,0,0,48), Size=UDim2.new(0,146,1,-48), ZIndex=2, Parent=base })
-	bgGrad(side, Color3.fromRGB(23,23,28), Color3.fromRGB(16,16,21)); corner(side, 8); skinTag(side, "side")
-	new("Frame", { BackgroundColor3=T.StrokeSub, BorderSizePixel=0, AnchorPoint=Vector2.new(1,0), Position=UDim2.new(1,0,0,0), Size=UDim2.new(0,1,1,0), ZIndex=2, Parent=side })
-	local sideList = new("ScrollingFrame", { BackgroundTransparency=1, BorderSizePixel=0, Position=UDim2.new(0,9,0,12), Size=UDim2.new(1,-18,1,-54), ScrollBarThickness=0, CanvasSize=UDim2.new(), AutomaticCanvasSize=Enum.AutomaticSize.Y, ZIndex=2, Parent=side })
-	new("UIListLayout", { SortOrder=Enum.SortOrder.LayoutOrder, Padding=UDim.new(0,7), Parent=sideList })
-	local footer = new("Frame", { BackgroundTransparency=1, Position=UDim2.new(0,8,1,-34), Size=UDim2.new(1,-16,0,26), ZIndex=2, Parent=side })
-	
-	
-	
-	
-	
-	local content = new("Frame", { Name="Content", BackgroundTransparency=1, Position=UDim2.new(0,146,0,48), Size=UDim2.new(1,-146,1,-48), Parent=base })
+	-- NEXUS//ZERO command rail replaces the previous vertical sidebar.
+	local side = new("Frame", { Name="CommandRail", BackgroundColor3=T.Side, BorderSizePixel=0, Position=UDim2.new(0,0,0,54), Size=UDim2.new(1,0,0,46), ZIndex=2, Parent=base })
+	bgGrad(side, Color3.fromRGB(13,29,32), Color3.fromRGB(9,18,24), 0); skinTag(side, "side")
+	new("Frame", { BackgroundColor3=T.StrokeSub, BorderSizePixel=0, AnchorPoint=Vector2.new(0,1), Position=UDim2.new(0,0,1,0), Size=UDim2.new(1,0,0,1), ZIndex=2, Parent=side })
+	local sideList = new("ScrollingFrame", { Name="HorizontalTabs", Active=true, ScrollingDirection=Enum.ScrollingDirection.X, BackgroundTransparency=1, BorderSizePixel=0, Position=UDim2.new(0,12,0,5), Size=UDim2.new(1,-24,1,-10), ScrollBarThickness=0, CanvasSize=UDim2.new(), AutomaticCanvasSize=Enum.AutomaticSize.X, ZIndex=3, Parent=side })
+	new("UIListLayout", { FillDirection=Enum.FillDirection.Horizontal, SortOrder=Enum.SortOrder.LayoutOrder, VerticalAlignment=Enum.VerticalAlignment.Center, Padding=UDim.new(0,8), Parent=sideList })
+	local footer = new("Frame", { BackgroundTransparency=1, Visible=false, Position=UDim2.new(0,8,1,-34), Size=UDim2.new(1,-16,0,26), ZIndex=2, Parent=side })
+	local content = new("Frame", { Name="Workspace", BackgroundTransparency=1, Position=UDim2.new(0,0,0,100), Size=UDim2.new(1,0,1,-100), Parent=base })
 	local searchBox, colTop = nil, 8
 	if searchEnabled then
 		colTop = 42
@@ -1493,15 +1489,15 @@ function UILib:Window(config)
 	local activeCategory = nil
 	function Window:Category(name, catIcon)
 		local cat = { Name=name, _groups={} }
-		local tab = new("TextButton", { BackgroundColor3=T.Group, BackgroundTransparency=1, BorderSizePixel=0, Size=UDim2.new(1,0,0,38), Font=T.FontMed, Text="", TextColor3=T.SubText, TextSize=12, AutoButtonColor=false, ZIndex=3, Parent=sideList })
+		local tab = new("TextButton", { BackgroundColor3=T.Group, BackgroundTransparency=1, BorderSizePixel=0, Size=UDim2.new(0,122,0,34), Font=T.FontMed, Text="", TextColor3=T.SubText, TextSize=11, AutoButtonColor=false, ZIndex=3, Parent=sideList })
 		corner(tab, T.RadiusSm)
-		local ind = new("Frame", { BackgroundColor3=Color3.new(1,1,1), BorderSizePixel=0, AnchorPoint=Vector2.new(0,0.5), Position=UDim2.new(0,0,0.5,0), Size=UDim2.new(0,2,0,0), Parent=tab }); corner(ind, 1); accentGrad(ind)
+		local ind = new("Frame", { BackgroundColor3=Color3.new(1,1,1), BorderSizePixel=0, AnchorPoint=Vector2.new(0.5,1), Position=UDim2.new(0.5,0,1,0), Size=UDim2.new(0,0,0,2), Parent=tab }); corner(ind, 1); accentGrad(ind)
 		local indGlow = new("ImageLabel", { Name="AGlow", BackgroundTransparency=1, AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(0,1,0.5,0), Size=UDim2.new(0,26,0,26), Image=SHADOW_IMG, ImageColor3=aLo, ImageTransparency=1, ScaleType=Enum.ScaleType.Slice, SliceCenter=Rect.new(49,49,450,450), ZIndex=2, Parent=tab })
 		table.insert(Window._recolor, function() indGlow.ImageColor3 = Window._accent end)
-		local tabLabel = new("TextLabel", { BackgroundTransparency=1, Position=UDim2.new(0, catIcon and 32 or 11, 0, 0), Size=UDim2.new(1, catIcon and -38 or -14, 1, 0), Font=T.FontMed, Text=name, TextColor3=T.SubText, TextSize=12, TextXAlignment=Enum.TextXAlignment.Left, ZIndex=3, Parent=tab })
+		local tabLabel = new("TextLabel", { BackgroundTransparency=1, Position=UDim2.new(0, catIcon and 35 or 9, 0, 0), Size=UDim2.new(1, catIcon and -41 or -18, 1, 0), Font=T.FontMed, Text=name, TextColor3=T.SubText, TextSize=11, TextXAlignment=Enum.TextXAlignment.Left, ZIndex=3, Parent=tab })
 		skinTag(tab, "group")
 		local tabIco
-		if catIcon then tabIco = new("ImageLabel", { BackgroundTransparency=1, Position=UDim2.new(0,9,0.5,-8), Size=UDim2.new(0,16,0,16), Image=catIcon, ImageColor3=T.SubText, ZIndex=3, Parent=tab }) end
+		if catIcon then tabIco = new("ImageLabel", { BackgroundTransparency=1, Position=UDim2.new(0,11,0.5,-8), Size=UDim2.new(0,16,0,16), Image=catIcon, ImageColor3=T.SubText, ZIndex=3, Parent=tab }) end
 		local page = new("Frame", { Name=name, BackgroundTransparency=1, Position=UDim2.new(0,10,0,colTop), Size=UDim2.new(1,-20,1,-colTop-8), Visible=false, Parent=content })
 		local function makeColumn(columnName, position)
 			local col = new("ScrollingFrame", {
@@ -1565,7 +1561,7 @@ function UILib:Window(config)
 				activeCategory.Page.Visible=false
 				tween(activeCategory.Tab, E_FAST, { BackgroundTransparency=1 })
 				activeCategory._label.Name="Lbl"; tween(activeCategory._label, E_FAST, { TextColor3=T.SubText })
-				tween(activeCategory._ind, E_FAST, { Size=UDim2.new(0,2,0,0) }); if activeCategory._glow then tween(activeCategory._glow, E_FAST, { ImageTransparency=1 }) end
+				tween(activeCategory._ind, E_FAST, { Size=UDim2.new(0,0,0,2) }); if activeCategory._glow then tween(activeCategory._glow, E_FAST, { ImageTransparency=1 }) end
 				if activeCategory._ico then tween(activeCategory._ico, E_FAST, { ImageColor3=T.SubText }) end
 			end
 			if Window._closeSub then Window._closeSub() end
@@ -1574,7 +1570,7 @@ function UILib:Window(config)
 			leftCol.Position=UDim2.new(0,-16,0,0); rightCol.Position=UDim2.new(0.5,-11,0,0); tween(leftCol, E_SMOO, { Position=UDim2.new(0,0,0,0) }); tween(rightCol, E_SMOO, { Position=UDim2.new(0.5,5,0,0) }); for _i,_g in ipairs(cat._groups) do local _f=_g.frame; _f.Position=UDim2.new(0,-38,0,0); task.delay(0.085*_i*SPEED.mul, function() if activeCategory==cat then tween(_f, E_SMOO, { Position=UDim2.new(0,0,0,0) }) end end); task.delay(0.085*_i*SPEED.mul+0.9, function() _f.Position=UDim2.new(0,0,0,0) end) end
 			tween(tab, E_FAST, { BackgroundColor3=T.Group, BackgroundTransparency=0 })
 			tabLabel.Name="AF"; tween(tabLabel, E_FAST, { TextColor3=Window._accent })
-			ind.Size = UDim2.new(0,2,0,2); tween(ind, TweenInfo.new(0.42, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Size=UDim2.new(0,2,0,14) }); tween(indGlow, E_SMOO, { ImageTransparency=0.55 })
+			ind.Size = UDim2.new(0,0,0,2); tween(ind, TweenInfo.new(0.42, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Size=UDim2.new(0.72,0,0,2) }); tween(indGlow, E_SMOO, { ImageTransparency=0.55 })
 			if tabIco then tween(tabIco, E_FAST, { ImageColor3=Window._accent }) end
 			if crumb then crumb.Text = "\u{203A} "..name end
 			Window.OnCategoryChanged:Fire(name)
@@ -3462,13 +3458,13 @@ end
 
 if not UILib then
     ENV.alreadyRunning = nil
-    warn("[AETHER] Interface initialization failed. Check executor UI support and embedded interface source.")
+    warn("[NEXUS//ZERO] Interface initialization failed. Check executor UI support and embedded interface source.")
     return
 end
 
 Window = UILib:Window({
-    Title    = "AETHER",
-    Subtitle = "COMBAT INTERFACE  /  UNIVERSAL",
+    Title    = "NEXUS//ZERO",
+    Subtitle = "TACTICAL SYSTEMS  /  UNIVERSAL",
     AutoSave = true,
 })
 
@@ -5605,3 +5601,4 @@ task.delay(1.25, function()
         Window:DockUtilityPanels(Categories.Players, Categories.Keybinds, Categories.Shortcuts)
     end)
 end)
+
